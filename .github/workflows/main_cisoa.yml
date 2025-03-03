@@ -22,9 +22,9 @@ jobs:
     - name: Log in to registry
       uses: docker/login-action@v2
       with:
-        registry: 'ciso2025.azurecr.io'
-        username: 'ciso2025'
-        password: '2ZlKYZBT9vQYOs34mqpp3pUEXk7O3Q8fMcwL2D72Hp+ACRCC9/qK'
+        registry: ciso2025.azurecr.io
+        username: ciso2025
+        password: ${{ secrets.ACR_PASSWORD }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
