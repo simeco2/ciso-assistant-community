@@ -37,7 +37,7 @@ jobs:
         docker-compose --version
 
         # Modifier le docker-compose.yml pour utiliser votre ACR
-        sed -i 's|image: .*|image: ciso2025.azurecr.io/ciso-assistant:latest|g' docker-compose-default.yml
+        sed -i 's|image: .*|image: ciso2025.azurecr.io/ciso-assistant:latest|g' docker-compose.yml
         
         # Construire et pousser les images
         docker-compose build
