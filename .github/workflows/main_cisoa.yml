@@ -26,12 +26,12 @@ jobs:
         username: ciso2025
         password: ${{ secrets.ACR_PASSWORD }}
 
-    - name: Build and push container image to registry
+    - name: Build and push
       uses: docker/build-push-action@v3
       with:
+        context: .
         push: true
-        tags: ciso2025.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_15a455f556fb45ef9f9c9cef6873e3b9 }}/mcr.microsoft.com/appsvc/staticsite:${{ github.sha }}
-        file: ./Dockerfile
+        tags: ciso2025.azurecr.io/ciso-assistant:latest
 
   deploy:
     runs-on: ubuntu-latest
