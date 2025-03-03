@@ -26,26 +26,17 @@ jobs:
         username: ciso2025
         password: ${{ secrets.ACR_PASSWORD }}
 
-    - name: Build and push
-      uses: docker/build-push-action@v3
-      with:
-        context: .
-        push: true
-        tags: ciso2025.azurecr.io/ciso-assistant:latest
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
+    - name: Build and push with Docker Compose
+      run: |
+        # Modifier le docker-compose.yml pour utiliser votre ACR
+        sed -i 's|image: .*|image: ciso2025.azurecr.io/ciso-assistant:latest|g' docker-compose-default.yml
+        
+        # Construire et pousser les images
+        docker-compose build
+        docker-compose push
+        
     - name: Deploy to Azure Web App
-      id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'cisoa'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_a97953645c0d44e5966b2cdd3a72c98a }}
-        images: 'ciso2025.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_15a455f556fb45ef9f9c9cef6873e3b9 }}/mcr.microsoft.com/appsvc/staticsite:${{ github.sha }}'
+        app-name: ${{ secrets.WEBAPP_NAME }}
+        images: ciso2025.azurecr.io/ciso-assistant:latest
