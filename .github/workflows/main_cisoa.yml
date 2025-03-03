@@ -42,12 +42,23 @@ jobs:
         # Construire et pousser les images
         docker-compose build
         docker-compose push
-        
+             
     - name: Login to Azure
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
+
+    # Ajoutez les étapes de diagnostic ici
+    - name: Check Azure login status
+      run: |
+        echo "Checking if Azure login succeeded"
+        az account show || echo "Azure login failed"
+    
+    - name: Verify Web App exists
+      run: |
+        echo "Verifying Web App exists"
+        az webapp list --query "[?name=='${{ secrets.WEBAPP_NAME }}']" || echo "Web App not found"
+                    
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
