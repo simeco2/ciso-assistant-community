@@ -26,8 +26,16 @@ jobs:
         username: ciso2025
         password: ${{ secrets.ACR_PASSWORD }}
 
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+      
     - name: Build and push with Docker Compose
       run: |
+        # Vérifier que docker-compose est installé
+        docker-compose --version
+
         # Modifier le docker-compose.yml pour utiliser votre ACR
         sed -i 's|image: .*|image: ciso2025.azurecr.io/ciso-assistant:latest|g' docker-compose-default.yml
         
